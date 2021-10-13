@@ -26,16 +26,8 @@ import re
 
 #todo: incorporate different collection types rather than a catch all publications, requires other changes to template
 publist = {
-    "proceeding": {
-        "file" : "proceedings.bib",
-        "venuekey": "booktitle",
-        "venue-pretext": "In the proceedings of ",
-        "collection" : {"name":"publications",
-                        "permalink":"/publication/"}
-        
-    },
     "journal":{
-        "file": "pubs.bib",
+        "file": "test-papers.bib",
         "venuekey" : "journal",
         "venue-pretext" : "",
         "collection" : {"name":"publications",
@@ -68,7 +60,7 @@ for pubsource in publist:
         b = bibdata.entries[bib_id].fields
         
         try:
-            pub_year = f'{b["year"]}'
+            pub_year = b["date"]
 
             #todo: this hack for month and day needs some cleanup
             if "month" in b.keys(): 
@@ -153,8 +145,9 @@ for pubsource in publist:
 
             with open("../_publications/" + md_filename, 'w') as f:
                 f.write(md)
-            print(f'SUCESSFULLY PARSED {bib_id}: \"', b["title"][:60],"..."*(len(b['title'])>60),"\"")
+            print('SUCESSFULLY PARSED {bib_id}:') # \"' + b["title"][:60]+ "..."*(len(b['title'])>60)+ "\"")
         # field may not exist for a reference
         except KeyError as e:
-            print(f'WARNING Missing Expected Field {e} from entry {bib_id}: \"', b["title"][:30],"..."*(len(b['title'])>30),"\"")
+            print("WARNING Missing Expected Field {e} from entry {bib_id}: ", b["title"][:30],"..."*(len(b['title'])>30),"\"")
+            print('WARNING')
             continue

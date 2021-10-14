@@ -11,11 +11,12 @@ redirect_from:
 
 Education
 ======
-* B.S. in GitHub, GitHub University, 2012
-* M.S. in Jekyll, GitHub University, 2014
-* Ph.D in Version Control Theory, GitHub University, 2018 (expected)
+* B.A. (Hon) in Geography, Simon Fraser University, 2002
+* Adv. Dip. (Hon) in Geographic Information Systems, British Columbia Institute of Technology, 2004
+* M.S. in Geography, University of Victoria, 2007
+* Ph.D in Geography, University of Victoria, 2011
 
-Work experience
+<!--Work experience
 ======
 * Summer 2015: Research Assistant
   * Github University
@@ -35,7 +36,7 @@ Skills
   * Sub-skill 2.2
   * Sub-skill 2.3
 * Skill 3
-
+-->
 Publications
 ======
   <ul>{% for post in site.publications %}

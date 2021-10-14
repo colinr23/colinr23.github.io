@@ -1,8 +1,13 @@
 ---
 layout: archive
-permalink: /tools/
 title: "Tools and Methods"
+permalink: /tools/
 author_profile: true
 ---
 
-Test
+{% include base_path %}
+
+
+{% for post in site.tools %}
+  {% include archive-single.html %}
+{% endfor %}

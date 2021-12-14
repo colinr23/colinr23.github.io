@@ -7,7 +7,6 @@ venue: "Wilfrid Laurier University, Department of Geography and Environmental St
 date: 2021-01-01
 location: "Waterloo, Canada"
 ---
-
 [see course page](https://colinr23.github.io/GESC151/)
 
 The earth is in constant flux; with natural processes constantly creating changes in weather, landforms, and habitats which in turn drive changes in the distributions of plant and animal communities and their interactions. Social and anthropogenic processes of change layer onto this dynamic earth to both augment existing processes through resource extraction, disturbances, pollution, and conversation and remediation practices as well as be impacted by changes in natural processes. Seen from a geographic perspective, this infinitely complex arrangement of natural and anthropogenic processes produces patterns of geographic variation in everything around us. A geographical lens into this complexity can reveal new and hidden insights into everything from crime, to health, to deforestation, to climate change. In order to detect, decode, and make meaning of these geographic patterns around us, we need to be able to interact with information about the earth recorded at local, regional and global scales. A digital representation of this earth, termed the Digital Earth, can be a tool to navigate the patterns and processes of change and help us create a more sustainable world. 

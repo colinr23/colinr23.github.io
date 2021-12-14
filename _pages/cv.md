@@ -13,7 +13,7 @@ Education
 ======
 * B.A. (Hon) in Geography, Simon Fraser University, 2002
 * Adv. Dip. (Hon) in Geographic Information Systems, British Columbia Institute of Technology, 2004
-* M.S. in Geography, University of Victoria, 2007
+* M.Sc. in Geography, University of Victoria, 2007
 * Ph.D in Geography, University of Victoria, 2011
 
 Work experience

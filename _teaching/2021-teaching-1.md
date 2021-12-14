@@ -21,7 +21,7 @@ In order to motivate the use of the Digital Earth to understand real-world and s
 6.	Global marine shipping tracking from space
 7.	Community-based mapping and counter-mapping
 
-[course sneak peak available here](https://thespatiallab.org/_book)
+[see course page](https://colinr23.github.io/GESC151/)
 
 **Course Goal and Learning Outcomes**
 The goal of this course is to develop an understanding of how the earth is represented in digital systems and how these representations can be used to address environmental issues of societal relevance. In completing this course, students will be able to:

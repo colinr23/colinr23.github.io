@@ -7,7 +7,9 @@ venue: "Wilfrid Laurier University, Department of Geography and Environmental St
 date: 2021-01-01
 location: "Waterloo, Canada"
 ---
+
 [see lab page](https://colinr23.github.io/GESC258-labs/)
+
 Geographers seek to describe and explain the patterns they see in both natural and human landscapes. They do so by collecting data on the phenomena, usually with a spatial focus. This is followed by application of a variety of data analysis methods, including visualization, descriptive statistics, inferential statistics (to make inferences and explain) and spatial analysis. Today's software tools such as spreadsheets, Geographic Information Systems (GIS), and statistical analysis software greatly ease and enhance these efforts.   
 
 This course provides hands-on experience with the application of research methods used in geography and environmental studies. The course focuses on how data can be used to both explore new theory and to evaluate existing theories and hypotheses. Geographic and environmental examples will be used to illustrate the methods and concepts introduced throughout the course.

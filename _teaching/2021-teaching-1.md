@@ -8,6 +8,8 @@ date: 2021-01-01
 location: "Waterloo, Canada"
 ---
 
+[see course page](https://colinr23.github.io/GESC151/)
+
 The earth is in constant flux; with natural processes constantly creating changes in weather, landforms, and habitats which in turn drive changes in the distributions of plant and animal communities and their interactions. Social and anthropogenic processes of change layer onto this dynamic earth to both augment existing processes through resource extraction, disturbances, pollution, and conversation and remediation practices as well as be impacted by changes in natural processes. Seen from a geographic perspective, this infinitely complex arrangement of natural and anthropogenic processes produces patterns of geographic variation in everything around us. A geographical lens into this complexity can reveal new and hidden insights into everything from crime, to health, to deforestation, to climate change. In order to detect, decode, and make meaning of these geographic patterns around us, we need to be able to interact with information about the earth recorded at local, regional and global scales. A digital representation of this earth, termed the Digital Earth, can be a tool to navigate the patterns and processes of change and help us create a more sustainable world. 
 
 The aim of this introductory course is to provide a background in the fundamentals of Digital Earth Systems and explore the Digital Earth from a geographic perspective. A major aim of this course is to expose students to real-world practical applications of Digital Earth Systems in science, environmental management, city management plans, and public health. Students will explore a variety of geospatial tools and technologies in this course, including digital globes, drones, satellite imagery, Global Navigation Satellite System (GNSS), Global Positioning System (GPS), web maps, and geographic information systems (GIS)  through assignments students will gain experience examining these tools while gaining a deeper insight into how they are used to change and help us understand the world around us.   
@@ -21,7 +23,6 @@ In order to motivate the use of the Digital Earth to understand real-world and s
 6.	Global marine shipping tracking from space
 7.	Community-based mapping and counter-mapping
 
-[see course page](https://colinr23.github.io/GESC151/)
 
 **Course Goal and Learning Outcomes**
 The goal of this course is to develop an understanding of how the earth is represented in digital systems and how these representations can be used to address environmental issues of societal relevance. In completing this course, students will be able to:

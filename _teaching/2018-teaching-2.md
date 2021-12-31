@@ -2,9 +2,9 @@
 title: "Spatial Information Technology, Globalization and International Development"
 collection: teaching
 type: "Graduate course"
-permalink: /teaching/2019-teaching-2
+permalink: /teaching/2018-teaching-2
 venue: "Wilfrid Laurier University, Department of Geography and Environmental Studies"
-date: 2019-01-01
+date: 2018-01-01
 location: "Waterloo, Canada"
 ---
 

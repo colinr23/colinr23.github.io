@@ -30,7 +30,7 @@ Work experience
   * Bluedot Global
   * Duties included: applying nlp models, developing model evaluation pipeline
   
-  * 2018-2021: Data Scientist
+* 2018-2021: Data Scientist
   * Red Barn Environmental
   * Duties included: Statistical analysis, data wrangling, research/technical writing
 

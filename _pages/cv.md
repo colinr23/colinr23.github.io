@@ -18,11 +18,19 @@ Education
 
 Work experience
 ======
-* 2010-Current: Lecturer (10), Assistant (11-15), Associate (16-21) Professor
+* 2010-Current: Director of Data Science
+  * Global Spatial Technology Solutions (GSTS)
+  * Duties included: leading team of 14 data scientists on marine ai  and geospatial data science applications
+
+* 2010-2023: Lecturer (10), Assistant (11-15), Associate (16-21) Professor
   * Wilfrid Laurier University
   * Duties included: teaching undergraduate and graduate courses, research program, university and professional service
 
-* 2018-Current: Data Scientist
+* 2010-2022: Senior Data Engineer
+  * Bluedot Global
+  * Duties included: applying nlp models, developing model evaluation pipeline
+  
+  * 2018-Current: Data Scientist
   * Red Barn Environmental
   * Duties included: Statistical analysis, data wrangling, research/technical writing
 

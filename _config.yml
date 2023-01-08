@@ -82,12 +82,12 @@ analytics:
 author:
   name             : "About"
   avatar           : "profile.jpeg"
-  bio              : "Academic professional working at the intersection of environmental change, health, and geospatial data science"
-  location         : "Haldimand Tract  / Salish Sea"
-  employer         : "Wilfrid Laurier University"
+  bio              : "Research professional working at the intersection of environmental systems, health, and data science"
+  location         : "Salish Sea"
+  employer         : "GSTS"
   pubmed           : # "https://www.ncbi.nlm.nih.gov/pubmed/?term=john+snow"
   googlescholar    : "https://scholar.google.ca/citations?user=GUBTEc4AAAAJ&hl=en"
-  email            : "colinr23@gmail.com"
+  email            : "colin.robertson.geo@outlook.com"
   researchgate     :  "https://www.researchgate.net/profile/Colin-Robertson"
   uri              : "https://spacedata.substack.com/"
   bitbucket        :

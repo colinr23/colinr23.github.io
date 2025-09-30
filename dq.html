@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hexagonal Dashboard</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #1a1a2e;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        
+        .dashboard-container {
+            background: #16213e;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            overflow: hidden;
+        }
+        
+        .tabs {
+            display: flex;
+            background: #0f172a;
+            border-bottom: 2px solid rgba(102, 126, 234, 0.3);
+        }
+        
+        .tab {
+            padding: 15px 40px;
+            color: rgba(255, 255, 255, 0.6);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+            user-select: none;
+        }
+        
+        .tab:hover {
+            color: rgba(255, 255, 255, 0.9);
+            background: rgba(102, 126, 234, 0.1);
+        }
+        
+        .tab.active {
+            color: white;
+            border-bottom-color: #667eea;
+            background: rgba(102, 126, 234, 0.2);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+            position: relative;
+        }
+        
+        #dashboard {
+            background: #16213e;
+        }
+        
+        .section-wedge {
+            fill: rgba(30, 30, 60, 0.7);
+            stroke: rgba(102, 126, 234, 0.5);
+            stroke-width: 2;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .section-wedge:hover {
+            fill: rgba(102, 126, 234, 0.3);
+            stroke: #667eea;
+            stroke-width: 3;
+        }
+        
+        .radial-line {
+            stroke: rgba(102, 126, 234, 0.3);
+            stroke-width: 2;
+        }
+        
+        .center-hexagon {
+            fill: url(#centerGradient);
+            stroke: rgba(255, 255, 255, 0.5);
+            stroke-width: 3;
+            filter: drop-shadow(0 0 20px rgba(245, 87, 108, 0.5));
+        }
+        
+        .chart-line {
+            fill: none;
+            stroke: #667eea;
+            stroke-width: 2;
+        }
+        
+        .chart-area {
+            fill: rgba(102, 126, 234, 0.2);
+        }
+        
+        .chart-dot {
+            fill: #667eea;
+            stroke: white;
+            stroke-width: 1.5;
+        }
+        
+        .section-label {
+            fill: white;
+            font-size: 14px;
+            font-weight: bold;
+            text-anchor: middle;
+            pointer-events: none;
+        }
+        
+        .center-text {
+            fill: white;
+            font-size: 12px;
+            font-weight: bold;
+            text-anchor: middle;
+        }
+        
+        .axis-line {
+            stroke: rgba(255, 255, 255, 0.1);
+            stroke-width: 1;
+        }
+        
+        .completeness-label {
+            fill: rgba(255, 255, 255, 0.6);
+            font-size: 10px;
+            text-anchor: middle;
+        }
+        
+        .corner-box {
+            fill: rgba(30, 30, 60, 0.8);
+            stroke: rgba(102, 126, 234, 0.4);
+            stroke-width: 2;
+            rx: 6;
+        }
+        
+        .corner-text {
+            fill: white;
+            font-size: 11px;
+            text-anchor: middle;
+            font-weight: 600;
+        }
+        
+        .score-widget {
+            fill: rgba(20, 20, 40, 0.9);
+            stroke: rgba(102, 126, 234, 0.6);
+            stroke-width: 2;
+            rx: 8;
+        }
+        
+        .score-value {
+            fill: #667eea;
+            font-size: 28px;
+            font-weight: bold;
+            text-anchor: middle;
+        }
+        
+        .score-label {
+            fill: rgba(255, 255, 255, 0.7);
+            font-size: 10px;
+            text-anchor: middle;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .filter-container {
+            position: absolute;
+            top: 80px;
+            left: 30px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            max-width: 400px;
+            z-index: 10;
+        }
+        
+        .filter-tag {
+            padding: 8px 16px;
+            background: rgba(30, 30, 60, 0.8);
+            border: 2px solid rgba(102, 126, 234, 0.4);
+            border-radius: 20px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+        
+        .filter-tag:hover {
+            background: rgba(102, 126, 234, 0.3);
+            border-color: #667eea;
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .filter-tag.active {
+            background: rgba(102, 126, 234, 0.6);
+            border-color: #667eea;
+            color: white;
+            box-shadow: 0 0 15px rgba(102, 126, 234, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="tabs">
+            <div class="tab active" data-tab="profiling">Profiling</div>
+            <div class="tab" data-tab="forecasts">Forecasts</div>
+            <div class="tab" data-tab="metrics">Metrics</div>
+        </div>
+        
+        <div class="tab-content active" id="profiling-content">
+            <div class="filter-container">
+                <div class="filter-tag active" data-table="all">All</div>
+                <div class="filter-tag" data-table="table-1">Table-1</div>
+                <div class="filter-tag" data-table="table-2">Table-2</div>
+                <div class="filter-tag" data-table="table-3">Table-3</div>
+                <div class="filter-tag" data-table="table-4">Table-4</div>
+                <div class="filter-tag" data-table="table-5">Table-5</div>
+                <div class="filter-tag" data-table="table-6">Table-6</div>
+            </div>
+            <svg id="dashboard"></svg>
+        </div>
+        
+        <div class="tab-content" id="forecasts-content">
+            <svg id="forecasts-view" width="1200" height="800">
+                <text x="600" y="400" text-anchor="middle" fill="white" font-size="24" font-weight="bold">Forecasts View</text>
+                <text x="600" y="440" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="14">Coming soon...</text>
+            </svg>
+        </div>
+        
+        <div class="tab-content" id="metrics-content">
+            <svg id="metrics-view" width="1200" height="800">
+                <text x="600" y="400" text-anchor="middle" fill="white" font-size="24" font-weight="bold">Metrics View</text>
+                <text x="600" y="440" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="14">Coming soon...</text>
+            </svg>
+        </div>
+    </div>
+    
+    <script>
+        // Configuration
+        const width = 1200;
+        const height = 800;
+        const centerX = width / 2;
+        const centerY = height / 2;
+        const outerRadius = 320;
+        const innerRadius = 0;
+        const hexagonSize = 70;
+        
+        // Create SVG
+        const svg = d3.select('#dashboard')
+            .attr('width', width)
+            .attr('height', height);
+        
+        // Define gradients
+        const defs = svg.append('defs');
+        
+        const centerGradient = defs.append('radialGradient')
+            .attr('id', 'centerGradient');
+        centerGradient.append('stop')
+            .attr('offset', '0%')
+            .attr('stop-color', 'rgba(245, 87, 108, 0.9)');
+        centerGradient.append('stop')
+            .attr('offset', '100%')
+            .attr('stop-color', 'rgba(240, 147, 251, 0.7)');
+        
+        // Generate sample data for charts
+        function generateData(points = 20) {
+            return d3.range(points).map(i => ({
+                x: i,
+                y: Math.random() * 0.6 + 0.2 + Math.sin(i * 0.5) * 0.2
+            }));
+        }
+        
+        // Define 6 sections (flat-top hexagon orientation)
+        const sections = [
+            { id: 1, label: 'Completeness', angle: 210, color: '#667eea', score: 85 },
+            { id: 2, label: 'Validity', angle: 330, color: '#764ba2', score: 72 },
+            { id: 3, label: 'Consistency', angle: 30, color: '#f093fb', score: 90 },
+            { id: 4, label: 'Currentness', angle: 90, color: '#f5576c', score: 68 },
+            { id: 5, label: 'Credibility', angle: 150, color: '#4facfe', score: 78 },
+            { id: 6, label: 'Representativeness', angle: 270, color: '#00f2fe', score: 82 }
+        ];
+        
+        // Main group
+        const mainGroup = svg.append('g');
+        
+        // Draw radial lines from center
+        sections.forEach(section => {
+            const angle = (section.angle - 90) * Math.PI / 180;
+            mainGroup.append('line')
+                .attr('class', 'radial-line')
+                .attr('x1', centerX)
+                .attr('y1', centerY)
+                .attr('x2', centerX + Math.cos(angle) * outerRadius)
+                .attr('y2', centerY + Math.sin(angle) * outerRadius);
+        });
+        
+        // Create wedge path generator
+        function createWedgePath(startAngle, endAngle, innerR, outerR) {
+            const start1 = [(startAngle - 90) * Math.PI / 180];
+            const end1 = [(endAngle - 90) * Math.PI / 180];
+            
+            const path = d3.path();
+            
+            // Start at inner radius
+            path.moveTo(
+                centerX + Math.cos(start1) * innerR,
+                centerY + Math.sin(start1) * innerR
+            );
+            
+            // Line to outer radius
+            path.lineTo(
+                centerX + Math.cos(start1) * outerR,
+                centerY + Math.sin(start1) * outerR
+            );
+            
+            // Arc along outer radius
+            path.arc(centerX, centerY, outerR, start1, end1);
+            
+            // Line back to inner radius
+            path.lineTo(
+                centerX + Math.cos(end1) * innerR,
+                centerY + Math.sin(end1) * innerR
+            );
+            
+            // Arc along inner radius (backwards)
+            path.arc(centerX, centerY, innerR, end1, start1, true);
+            
+            path.closePath();
+            return path.toString();
+        }
+        
+        // Draw wedge sections with charts
+        sections.forEach((section, i) => {
+            const startAngle = section.angle - 30;
+            const endAngle = section.angle + 30;
+            const midAngle = section.angle;
+            
+            // Draw wedge
+            const wedgeGroup = mainGroup.append('g')
+                .attr('class', 'section-group');
+            
+            wedgeGroup.append('path')
+                .attr('class', 'section-wedge')
+                .attr('d', createWedgePath(startAngle, endAngle, innerRadius, outerRadius));
+            
+            // Create mini chart in wedge
+            const chartData = generateData(15);
+            const chartGroup = wedgeGroup.append('g')
+                .attr('class', 'chart-group');
+            
+            // Calculate chart bounds within wedge
+            const chartRadius = outerRadius * 0.65;
+            const chartAngle = (midAngle - 90) * Math.PI / 180;
+            const chartCenterX = centerX + Math.cos(chartAngle) * chartRadius;
+            const chartCenterY = centerY + Math.sin(chartAngle) * chartRadius;
+            const chartWidth = 100;
+            const chartHeight = 50;
+            
+            // Scales for mini chart
+            const xScale = d3.scaleLinear()
+                .domain([0, chartData.length - 1])
+                .range([-chartWidth/2, chartWidth/2]);
+            
+            const yScale = d3.scaleLinear()
+                .domain([0, 1])
+                .range([chartHeight/2, -chartHeight/2]);
+            
+            // Draw grid lines
+            for (let j = 0; j <= 4; j++) {
+                chartGroup.append('line')
+                    .attr('class', 'axis-line')
+                    .attr('x1', chartCenterX - chartWidth/2)
+                    .attr('y1', chartCenterY + yScale(j * 0.25))
+                    .attr('x2', chartCenterX + chartWidth/2)
+                    .attr('y2', chartCenterY + yScale(j * 0.25));
+            }
+            
+            // Line generator
+            const line = d3.line()
+                .x((d, i) => chartCenterX + xScale(i))
+                .y(d => chartCenterY + yScale(d.y))
+                .curve(d3.curveMonotoneX);
+            
+            // Area generator
+            const area = d3.area()
+                .x((d, i) => chartCenterX + xScale(i))
+                .y0(chartCenterY + chartHeight/2)
+                .y1(d => chartCenterY + yScale(d.y))
+                .curve(d3.curveMonotoneX);
+            
+            // Draw area
+            chartGroup.append('path')
+                .datum(chartData)
+                .attr('class', 'chart-area')
+                .attr('d', area);
+            
+            // Draw line
+            chartGroup.append('path')
+                .datum(chartData)
+                .attr('class', 'chart-line')
+                .attr('d', line);
+            
+            // Draw dots
+            chartGroup.selectAll('.chart-dot')
+                .data(chartData)
+                .join('circle')
+                .attr('class', 'chart-dot')
+                .attr('cx', (d, i) => chartCenterX + xScale(i))
+                .attr('cy', d => chartCenterY + yScale(d.y))
+                .attr('r', 3);
+            
+            // Add label outside the wedge
+            const labelAngle = (midAngle - 90) * Math.PI / 180;
+            const labelRadius = outerRadius + 40;
+            chartGroup.append('text')
+                .attr('class', 'section-label')
+                .attr('x', centerX + Math.cos(labelAngle) * labelRadius)
+                .attr('y', centerY + Math.sin(labelAngle) * labelRadius)
+                .text(section.label);
+            
+            // Add score widget
+            const widgetAngle = (midAngle - 90) * Math.PI / 180;
+            const widgetRadius = outerRadius * 0.35;
+            const widgetX = centerX + Math.cos(widgetAngle) * widgetRadius;
+            const widgetY = centerY + Math.sin(widgetAngle) * widgetRadius;
+            const widgetWidth = 70;
+            const widgetHeight = 60;
+            
+            const widgetGroup = wedgeGroup.append('g')
+                .attr('class', 'widget-group');
+            
+            // Widget background
+            widgetGroup.append('rect')
+                .attr('class', 'score-widget')
+                .attr('x', widgetX - widgetWidth/2)
+                .attr('y', widgetY - widgetHeight/2)
+                .attr('width', widgetWidth)
+                .attr('height', widgetHeight);
+            
+            // Score value
+            widgetGroup.append('text')
+                .attr('class', 'score-value')
+                .attr('x', widgetX)
+                .attr('y', widgetY + 5)
+                .text(section.score);
+            
+            // Score label
+            widgetGroup.append('text')
+                .attr('class', 'score-label')
+                .attr('x', widgetX)
+                .attr('y', widgetY + 20)
+                .text('Score');
+        });
+        
+        // Draw center hexagon (flat-top)
+        function createHexagon(cx, cy, size) {
+            const points = [];
+            for (let i = 0; i < 6; i++) {
+                const angle = (i * 60) * Math.PI / 180;
+                points.push([
+                    cx + size * Math.cos(angle),
+                    cy + size * Math.sin(angle)
+                ]);
+            }
+            return points;
+        }
+        
+        const hexPoints = createHexagon(centerX, centerY, hexagonSize);
+        
+        mainGroup.append('polygon')
+            .attr('class', 'center-hexagon')
+            .attr('points', hexPoints.map(p => p.join(',')).join(' '));
+        
+        // Create inner shape based on data quality scores (example values between 0 and 1)
+        const dataScores = [
+            0.85, // Completeness (85)
+            0.72, // Validity (72)
+            0.90, // Consistency (90)
+            0.68, // Currentness (68)
+            0.78, // Credibility (78)
+            0.82  // Representativeness (82)
+        ];
+        
+        // Create points for inner shape (positioned between edge and center)
+        const innerShapePoints = hexPoints.map((point, i) => {
+            const score = dataScores[i];
+            // Interpolate between center and hexagon edge based on score
+            const x = centerX + (point[0] - centerX) * score;
+            const y = centerY + (point[1] - centerY) * score;
+            return [x, y];
+        });
+        
+        // Draw inner data shape
+        mainGroup.append('polygon')
+            .attr('points', innerShapePoints.map(p => p.join(',')).join(' '))
+            .attr('fill', 'rgba(102, 126, 234, 0.4)')
+            .attr('stroke', '#667eea')
+            .attr('stroke-width', 2);
+        
+        // Add dots at each point
+        mainGroup.selectAll('.score-dot')
+            .data(innerShapePoints)
+            .join('circle')
+            .attr('class', 'score-dot')
+            .attr('cx', d => d[0])
+            .attr('cy', d => d[1])
+            .attr('r', 4)
+            .attr('fill', '#667eea')
+            .attr('stroke', 'white')
+            .attr('stroke-width', 2);
+        
+        // Center text
+        mainGroup.append('text')
+            .attr('class', 'center-text')
+            .attr('x', centerX)
+            .attr('y', centerY + 5)
+            .style('font-size', '16px')
+            .text('DQS: 84');
+        
+        // Add hover interactions
+        d3.selectAll('.section-wedge')
+            .on('mouseover', function() {
+                d3.select(this)
+                    .transition()
+                    .duration(200)
+                    .attr('opacity', 1);
+            })
+            .on('mouseout', function() {
+                d3.select(this)
+                    .transition()
+                    .duration(200)
+                    .attr('opacity', 1);
+            });
+        
+        // Tab switching functionality
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                // Remove active class from all tabs and content
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                
+                // Add active class to clicked tab
+                this.classList.add('active');
+                
+                // Show corresponding content
+                const tabName = this.getAttribute('data-tab');
+                document.getElementById(tabName + '-content').classList.add('active');
+            });
+        });
+        
+        // Filter tag functionality
+        document.querySelectorAll('.filter-tag').forEach(tag => {
+            tag.addEventListener('click', function() {
+                // Remove active class from all tags
+                document.querySelectorAll('.filter-tag').forEach(t => t.classList.remove('active'));
+                
+                // Add active class to clicked tag
+                this.classList.add('active');
+                
+                // Get selected table
+                const selectedTable = this.getAttribute('data-table');
+     
